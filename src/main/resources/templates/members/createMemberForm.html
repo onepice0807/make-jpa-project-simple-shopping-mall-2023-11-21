@@ -1,10 +1,54 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:replace="fragments/header :: header">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
+<style>
+        .fieldError {
+            border-color : #ff0000;
+        }
 
+        .fieldErrorText {
+            color : #ff0000;
+        }
+    </style>
+
+<body>
+<div th:replace="fragments/nav :: navbar" />
+
+<div class="container">
+    <h1>회원 등록</h1>
+
+    <form role="form" action="/members/new" method="post" th:object="${memberForm}">
+
+        <div class="mb-3 mt-3">
+            <label th:for="name" class="form-label">이름 :</label>
+            <input type="text" class="form-control" th:field="*{name}" placeholder="이름을 입력하세요..."
+                   th:class="${#fields.hasErrors('name')}? 'form-control fieldError' : 'form-control'"/>
+            <p class="fieldErrorText" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+        </div>
+
+        <div class="mb-3 mt-3">
+            <label th:for="zipcode" class="form-label">우편번호 :</label>
+            <input type="text" class="form-control" th:field="*{zipcode}" placeholder="우편번호를 입력하세요..." />
+        </div>
+
+        <div class="mb-3 mt-3">
+            <label th:for="city" class="form-label">도시 :</label>
+            <input type="text" class="form-control" th:field="*{city}" placeholder="도시를 입력하세요..." />
+        </div>
+
+        <div class="mb-3 mt-3">
+            <label th:for="street" class="form-label">나머지 주소 :</label>
+            <input type="text" class="form-control" th:field="*{street}" placeholder="나머지 주소를 입력하세요..." />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+
+    </form>
+
+
+</div>
 </body>
 </html>

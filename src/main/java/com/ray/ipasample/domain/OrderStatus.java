@@ -1,2 +1,5 @@
-package com.ray.ipasample.domain;public enum OrderStatus {
+package com.ray.ipasample.domain;
+
+public enum OrderStatus {
+    ORDER, CANCEL
 }
