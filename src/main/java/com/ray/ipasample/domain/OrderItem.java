@@ -1,12 +1,10 @@
 package com.ray.ipasample.domain;
 
+import com.ray.ipasample.domain.item.Item;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -18,7 +16,15 @@ public class OrderItem {
     @Column(name = "order_item_id")
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id")
     private Item item;
 
-    private Order order;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="order_id")
+    private Order order; 
+
+    private int orderPrice; // 주문 가격
+    
+    private int count; // 주문 수량
 }
