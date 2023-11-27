@@ -2,6 +2,7 @@ package com.ray.ipasample.service;
 
 import com.ray.ipasample.Repository.MemberRepository;
 import com.ray.ipasample.domain.Member;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,9 +11,11 @@ import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor // final이 있는 필드만 생성자를 만들어 줌
 public class MemberService {
-    @Autowired
-    private MemberRepository memberRepository;
+
+//    @Autowired
+    private final MemberRepository memberRepository;
 
     // 회원 등록
     @Transactional(readOnly = false)

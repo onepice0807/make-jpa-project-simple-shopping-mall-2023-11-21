@@ -1,5 +1,6 @@
 package com.ray.ipasample.domain.item;
 
+import com.ray.ipasample.Exception.NotEnoughStockException;
 import com.ray.ipasample.domain.Category;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,10 +27,33 @@ public abstract class Item {
 
     private int stockQuantity;
 
+    protected Item() {}
+
+    public Item(String name, int price, int stockQuantity) {
+        this.name = name;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+    }
+
     @ManyToMany
     @JoinTable(name = "category_item", // DB의 다대다 관계를 풀어줄 중간 테이블과의 조인 정보 기입
             joinColumns = @JoinColumn(name = "category_id"),
             inverseJoinColumns = @JoinColumn(name = "item_id")
     )
     private List<Category> categories = new ArrayList<>();
+
+    // 비즈니스 로직 추가(data 를 가지고 있는 쪽에  비즈니스 로직이 있는 것이 좋은 소프트웨어의 조건인 응집력을 만족시킨다)
+
+    // 재고수량 증가
+    public void addStock(int stockQuantity) {
+        this.stockQuantity += stockQuantity;
+    }
+
+    // 재고수량 감소 (판매, 재고관리)
+    public void removeStock(int stockQuantity) throws  NotEnoughStockException {
+        if (this.stockQuantity - stockQuantity < 0) {
+            throw new NotEnoughStockException("Stock quantity cannot be less than 0");
+        }
+        this.stockQuantity -= stockQuantity;
+    }
 }

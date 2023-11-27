@@ -1,10 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>Title</title>
 </head>
+
 <body>
-$END$
+<div th:replace="fragments/nav :: navbar" />
+
+<div class="container">
+  <h1>상품 목록 조회</h1>
+
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>상품명</th>
+      <th>가격</th>
+      <th>재고수량</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${items}">
+      <td th:text="${item.id}"></td>
+      <td th:text="${item.name}"></td>
+      <td th:text="${item.price}"></td>
+      <td th:text="${item.stockQuantity}"></td>
+      <td>
+        <a href="#" class="btn btn-primary" th:href="@{/items/{id}/edit (id=${item.id})}">수정</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
 </body>
 </html>

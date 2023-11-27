@@ -4,6 +4,7 @@ import com.ray.ipasample.domain.Address;
 import com.ray.ipasample.domain.Member;
 import com.ray.ipasample.dto.MemberForm;
 import com.ray.ipasample.service.MemberService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,10 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.validation.Valid;
 
 @Controller
+@RequiredArgsConstructor // final이 있는 필드만 생성자를 만들어 줌
 public class MemberController {
 
-    @Autowired
-    private MemberService memberService;
+//    @Autowired
+    private final MemberService memberService;
 
     @GetMapping("/members/new")
     public String createMemberForm(Model model) {
