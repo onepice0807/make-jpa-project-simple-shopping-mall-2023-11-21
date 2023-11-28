@@ -39,4 +39,61 @@ public class Order {
     // 상태값이 추가되거난 삭제되면 위험해지므로 EnumType.STRING 사용을 추천한다
     @Enumerated(EnumType.STRING)
     private  OrderStatus status; // 주문 상태 [ORDER, CANCEL]
+
+    // 연관 관게의 편의 메서드(현재 엔티티(Order)의 값이 변경될 때 연관되어 있는 엔티티의 값도 바뀔 수 있도록 하는 메서드) 추가
+    // 연관 관계 편의 메서드는 실제적인 행위를 컨트롤 하는 역할이 되는 엔티티에 만드는 것이 좋다.
+    public void setMember(Member orderMember) {
+        this.member = orderMember;
+        this.member.getOrders().add(this); // 현재 주문자의 주문 목록에도 현재 주문을 넣어주어야 한다.
+    }
+
+    public void setDeliveryI(Delivery orderedDelivery) {
+        this.delivery = orderedDelivery;
+        this.delivery.setOrder(this);
+    }
+
+    public void addOrderItem(OrderItem orderItem) {
+        this.orderItems.add(orderItem); // 주문 상품 목록에 현재 주문상품을 넣어둠
+        orderItem.setOrder(this); // 주문 상품에도 현재 주문을 넣어둠
+    }
+
+    // 생성 메서드 (주문을 생성하는)
+    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
+        // orderItems(주문상품)은 여러개가 될 수 있기 때문에 가변인자 매개변수 처리
+
+        Order order = new Order();
+        order.setMember(member); // 주문자
+        order.setDelivery(delivery); // 배송지
+
+        for (OrderItem orderItem : orderItems) { // 주문한 상품
+            order.addOrderItem(orderItem);
+        }
+
+        order.setOrderDate(LocalDateTime.now()); // 주문시간
+
+        order.setStatus(OrderStatus.ORDER); //  주문상태로 변경
+
+        return order;
+    }
+
+    // 주문 취소 메서드
+    public void orderCancel() {
+        if (delivery.getStatus() == DeliveryStatus.COMPLETE) { // 배송 완료된 상품
+            throw new IllegalStateException("이미 배송 완료된 상품은 취소가 불가능합니다!!!");
+        }
+        this.setStatus(OrderStatus.CANCEL);
+        for (OrderItem orderItem : orderItems) {
+            orderItem.cancel(); // 각각의 주문된 상품에 대해 취소 시키는 메서드
+        }
+    }
+    
+    // 주문 조회
+    // 전체 주문 가격 조회
+    public int getTotalPrice() {
+        int totalPrice = 0;
+        for (OrderItem orderItem : orderItems) {
+            totalPrice += orderItem.getTotalOrderItemPrice();
+        }
+        return totalPrice;
+    }
 }

@@ -4,7 +4,6 @@ import com.ray.ipasample.Repository.ItemRepository;
 import com.ray.ipasample.domain.item.Book;
 import com.ray.ipasample.domain.item.Item;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

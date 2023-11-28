@@ -26,6 +26,7 @@ public class Member {
 
     // Member 의 입장에서 orders(멤버변수)는 일대다 관계
     // Order객체에 있는 member가 연관관계의 주인이고, 현재 orders 필드(멤버변수)는 거울임
+    // mappedBy 속성은 연관관꼐에서 주인이 아닌 필드에 기술
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
 }
