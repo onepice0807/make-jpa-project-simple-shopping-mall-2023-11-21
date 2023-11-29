@@ -28,7 +28,7 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    // FK => 연관관계의 주이
+    // FK => 연관관계의 주인
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="delivery_id")
     private Delivery delivery;

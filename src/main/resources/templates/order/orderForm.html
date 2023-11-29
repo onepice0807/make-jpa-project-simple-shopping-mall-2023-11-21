@@ -1,10 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <meta charset="UTF-8">
+    <title>Title</title>
 </head>
+
 <body>
-$END$
+<div th:replace="fragments/nav :: navbar" />
+
+<div class="container">
+    <h1>주문 등록</h1>
+    <form role="form" action="/order" method="post">
+        <div class="mb-3 mt-3">
+            <label th:for="member" class="form-label">주문자 :</label>
+            <select class="form-select mt-3" id="member" name="memberId">
+                <option>--회원선택--</option>
+                <option th:each="member : ${members}" th:value="${member.id}" th:text="${member.name}"></option>
+            </select>
+        </div>
+        <div class="mb-3 mt-3">
+            <label th:for="item" class="form-label">상품명 :</label>
+            <select class="form-select mt-3" id="item" name="itemId">
+                <option>--상품선택--</option>
+                <option th:each="item : ${items}" th:value="${item.id}" th:text="${item.name}"></option>
+            </select>
+        </div>
+        <div class="mb-3 mt-3">
+            <label th:for="count" class="form-label">주문수량 :</label>
+            <input type="number" name="count" class="form-control" id="count"/>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
 </body>
 </html>

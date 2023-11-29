@@ -1,10 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>Title</title>
 </head>
+
 <body>
-$END$
+<div th:replace="fragments/nav :: navbar" />
+
+<div class="container">
+  <h1>주문 목록 조회</h1>
+
+  <div>
+    <form th:object="${orderSearch}">
+      <div class="mb-3 mt-3">
+        <label th:for="memberName" class="form-label">회원명 :</label>
+        <input type="text" class="form-control" th:field="*{memberName}"/>
+      </div>
+      <div class="mb-3 mt-3">
+        <label th:for="orderStatus" class="form-label">주문상태 :</label>
+        <select class="form-select mt-3" th:field="*{orderStatus}">
+          <option value="">--주문상태--</option>
+          <option th:each="status : ${T(com.ray.ipasample.domain.OrderStatus).values()}"
+                  th:value="${status}"
+                  th:text="${status}" />
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">검색</button>
+  </form>
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>주문자</th>
+      <th>주문상품이름</th>
+      <th>주문수량</th>
+      <th>주문 상태</th>
+      <th>주문 시간</th>
+      <th>작업</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${orders}">
+      <td th:text="${order.id}"></td>
+      <td th:text="${order.member.name}"></td>
+      <td th:text="${order.orderItems[0].item.name}"></td>
+      <td th:text="${order.orderItems[0].count}"></td>
+      <td th:text="${order.orderItems[0].orderPrice}"></td>
+      <td th:text="${order.orderDate}"></td>
+      <td th:text="${order.status}"></td>
+      <td><a th:if="${order.status.name} == 'ORDER'" class="btn btn-primary" href="#" th:href="'javascript:orderCancel(' + ${order.id} + ')'">주문취소</a></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
 </body>
+<script>
+  function orderCancel(orderId) {
+    if (confirm("주문을 취소하시겠습니까?")) {
+      let form = document.createElement("form");
+      form.setAttribute("method", "post");
+      form.setAttribute("action", "/orders/" + orderId + "/orderCancel");
+      document.body.appendChild(form);
+      form.submit();
+    }
+  }
+</script>
 </html>

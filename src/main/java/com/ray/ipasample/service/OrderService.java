@@ -6,9 +6,12 @@ import com.ray.ipasample.Repository.MemberRepository;
 import com.ray.ipasample.Repository.OrderRepository;
 import com.ray.ipasample.domain.*;
 import com.ray.ipasample.domain.item.Item;
+import com.ray.ipasample.dto.OrderSearchCriteria;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -18,8 +21,9 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
-    
+
     // 주문
+    @Transactional(readOnly = false)
     public void order(Long memberId, Long itemId, int count) throws NotEnoughStockException {
 
         // memberId로 주문자 얻어오기
@@ -41,6 +45,7 @@ public class OrderService {
     }
     
     // 주문 취소
+    @Transactional(readOnly = false)
     public void cancelOrder(Long orderId) {
         Order order = orderRepository.findOne(orderId); // 주문한 Order 엔티티 조회
         order.orderCancel(); // 주문 취소
@@ -51,6 +56,10 @@ public class OrderService {
         // 도메인 모델 패턴(JPA 의 경우) : 엔티티가 가지고 있는 domain 내부에서 비즈니스 로직을 풀어냄 -> 서비스단의 로직이 트랜잭션스크립트패턴보다 간결해진다
         // -> JPA 는 엔티티가 가지고 있는 멤버의 값이 변경됨을 감지하고 직접 영속성 컨텍스트에 값을 반영하게 된다.
     }
-    
-    // 주문 조회(검색)
+
+    public List<Order> findOrder(OrderSearchCriteria orderSearch) {
+       return orderRepository.findAllByJpql(orderSearch);
+    }
+
+    // 주문 조회
 }

@@ -55,7 +55,7 @@ public class OrderItem {
     }
 
     public int getTotalOrderItemPrice() {
-        // 각각의 주문 상품에 대한 중간 가격 = 상푸가격(orderPrice * count)
+        // 각각의 주문 상품에 대한 중간 가격 = 상품가격(orderPrice * count)
         return this.getOrderPrice() * getCount();
     }
 }
